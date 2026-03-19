@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options"        content="DENY"/>
+  <meta http-equiv="Referrer-Policy"        content="no-referrer"/>
+  <!--
+    CSP: script-src 'self' — sem unsafe-inline.
+    Todo o JS está em assets/js/admin.js.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      style-src   'self' https://fonts.googleapis.com;
+      font-src    https://fonts.gstatic.com;
+      script-src  'self';
+      img-src     'self' data:;
+      connect-src 'none';
+    "/>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <title>Admin — Theuss.devs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/admin.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ TELA DE LOGIN ══════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <p class="login-logo">Theuss.devs</p>
+    <p class="login-sub">Painel Administrativo</p>
+
+    <div class="field">
+      <label for="inp-user">Usuário</label>
+      <input
+        type="text"
+        id="inp-user"
+        autocomplete="username"
+        spellcheck="false"
+        maxlength="60"
+        placeholder="Digite o usuário"
+      />
+    </div>
+
+    <div class="field">
+      <label for="inp-pass">Senha</label>
+      <input
+        type="password"
+        id="inp-pass"
+        autocomplete="current-password"
+        maxlength="120"
+        placeholder="Digite a senha"
+      />
+    </div>
+
+    <button class="btn-login" id="btn-login">Entrar</button>
+    <p class="login-error"  id="login-error"  aria-live="polite"></p>
+    <p class="lockout-msg"  id="lockout-msg"  aria-live="polite"></p>
+  </div>
+</div>
+
+<!-- ══════════════════ DASHBOARD ══════════════════ -->
+<div id="dashboard">
+
+  <header class="topbar">
+    <span class="topbar-brand">⬡ Admin Panel</span>
+    <div class="topbar-right">
+      <span class="session-badge">
+        Sessão expira em <span id="session-countdown">30:00</span>
+      </span>
+      <button class="btn-sm"              id="btn-view-site">← Ver site</button>
+      <button class="btn-sm btn-danger"   id="btn-logout">Sair</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── Perfil ── -->
+    <p class="section-title">Perfil público</p>
+    <div class="profile-card">
+      <div class="row-3">
+        <div class="field">
+          <label for="pf-name">Nome exibido</label>
+          <input type="text" id="pf-name"   class="link-input" maxlength="60"  placeholder="Theuss.devs"/>
+        </div>
+        <div class="field">
+          <label for="pf-handle">Handle</label>
+          <input type="text" id="pf-handle" class="link-input" maxlength="60"  placeholder="@theuss.devs"/>
+        </div>
+        <div class="field">
+          <label for="pf-bio">Bio</label>
+          <input type="text" id="pf-bio"    class="link-input" maxlength="100" placeholder="Developer & Designer"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Links ── -->
+    <p class="section-title">Links — ative e cole a URL</p>
+    <div class="links-list" id="links-list"></div>
+
+    <!-- ── Ações ── -->
+    <div class="actions-bar">
+      <button class="btn-primary" id="btn-save">Salvar alterações</button>
+      <button class="btn-outline" id="btn-export">Exportar links.json</button>
+      <label class="btn-outline" style="cursor:pointer">
+        Importar links.json
+        <input type="file" id="inp-import" accept=".json" style="display:none"/>
+      </label>
+    </div>
+
+    <!-- ── Log de segurança ── -->
+    <p class="section-title">Log de segurança</p>
+    <div class="security-log" id="security-log">
+      <p style="color:var(--muted);font-size:.75rem;">Nenhum evento registrado.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast de notificações -->
+<div id="toast" role="alert" aria-live="assertive"></div>
+
+<!-- Lógica do painel admin -->
+<script src="assets/js/admin.js"></script>
+
+</body>
+</html>
