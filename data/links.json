@@ -67,6 +67,13 @@
       "url": "",
       "icon": "portfolio",
       "active": false
+    },
+    {
+      "id": "github_repo",
+      "label": "Repositório",
+      "url": "https://github.com/theussdevs/theuss-devs-links",
+      "icon": "github_repo",
+      "active": false
     }
   ]
 }
