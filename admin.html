@@ -103,6 +103,25 @@
     <p class="section-title">Links — ative e cole a URL</p>
     <div class="links-list" id="links-list"></div>
 
+    <!-- ── GitHub Sync ── -->
+    <p class="section-title">Publicação automática — GitHub</p>
+    <div class="profile-card" style="margin-bottom:28px">
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+        Ao salvar, o site é atualizado automaticamente via GitHub → Vercel.<br>
+        O token é salvo só no seu navegador e nunca sai do seu dispositivo.
+      </p>
+      <div class="row-3" style="gap:16px">
+        <div class="field" style="grid-column:span 2">
+          <label for="gh-token">GitHub Token (repo)</label>
+          <input type="password" id="gh-token" class="link-input" maxlength="200" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"/>
+        </div>
+        <div class="field">
+          <label for="gh-repo">Repositório</label>
+          <input type="text" id="gh-repo" class="link-input" maxlength="100" placeholder="usuario/repo"/>
+        </div>
+      </div>
+    </div>
+
     <!-- ── Ações ── -->
     <div class="actions-bar">
       <button class="btn-primary" id="btn-save">Salvar alterações</button>
