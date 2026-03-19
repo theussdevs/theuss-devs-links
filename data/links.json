@@ -10,7 +10,7 @@
       "label": "Instagram",
       "url": "https://www.instagram.com/reel/DSxMVOBgJix/?igsh=MWRkaDBwdWJydGNjYg==",
       "icon": "instagram",
-      "active": true
+      "active": false
     },
     {
       "id": "tiktok",
