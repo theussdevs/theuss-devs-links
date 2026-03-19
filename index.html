@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!--
+    CSP: connect-src 'self' permite fetch para data/links.json no mesmo servidor.
+    Sem 'unsafe-inline' — todo JS e CSS está em arquivos externos.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      style-src   'self' https://fonts.googleapis.com;
+      font-src    https://fonts.gstatic.com;
+      script-src  'self';
+      img-src     'self' data:;
+      connect-src 'self';
+    "/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta name="robots"   content="index, follow"/>
+  <meta name="referrer" content="no-referrer"/>
+  <meta name="description" content="Theuss.devs — Links"/>
+
+  <title>Theuss.devs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/public.css"/>
+</head>
+<body>
+
+<!-- Cursor personalizado -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Canvas de partículas -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- Textura grain + blobs de fundo -->
+<div class="grain"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<main class="scene">
+
+  <!-- Avatar animado -->
+  <div class="avatar-wrap" id="avatar-wrap">
+    <div class="avatar-ping"></div>
+    <div class="avatar-ping"></div>
+    <div class="avatar-glow"></div>
+    <div class="avatar" id="avatar">T</div>
+  </div>
+
+  <!-- Bloco de perfil -->
+  <div class="profile" id="profile-block">
+    <h1 class="profile-name" id="profile-name">
+      <span class="accent">Theuss</span>.devs
+    </h1>
+    <p class="profile-handle" id="profile-handle">@theuss.devs</p>
+    <p class="profile-bio"    id="profile-bio"></p>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Lista de links (preenchida via JS) -->
+  <nav class="links" id="links-container" aria-label="Links de redes sociais"></nav>
+
+  <footer class="footer">
+    <p>© 2025 <span>@theuss.devs</span> — Todos os direitos reservados</p>
+  </footer>
+
+</main>
+
+<div class="scroll-hint">scroll ↓</div>
+
+<!-- Ícones SVG compartilhados -->
+<script src="assets/js/icons.js"></script>
+<!-- Lógica da página pública -->
+<script src="assets/js/public.js"></script>
+
+</body>
+</html>
