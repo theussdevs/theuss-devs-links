@@ -8,9 +8,9 @@
     {
       "id": "instagram",
       "label": "Instagram",
-      "url": "",
+      "url": "https://www.instagram.com/theuss.dev?igsh=aHpqdGszazYxdWk5",
       "icon": "instagram",
-      "active": false
+      "active": true
     },
     {
       "id": "tiktok",
