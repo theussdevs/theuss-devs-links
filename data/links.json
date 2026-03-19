@@ -57,9 +57,9 @@
     {
       "id": "whatsapp",
       "label": "WhatsApp",
-      "url": "",
+      "url": "https://wa.me/qr/QJPZ4CZEPJB4E1",
       "icon": "whatsapp",
-      "active": false
+      "active": true
     },
     {
       "id": "portfolio",
