@@ -29,9 +29,9 @@
     {
       "id": "github",
       "label": "GitHub",
-      "url": "",
+      "url": "https://github.com/theussdevs",
       "icon": "github",
-      "active": false
+      "active": true
     },
     {
       "id": "linkedin",
@@ -71,7 +71,7 @@
     {
       "id": "github_repo",
       "label": "Repositório",
-      "url": "https://github.com/theussdevs/theuss-devs-links",
+      "url": "",
       "icon": "github_repo",
       "active": false
     }
