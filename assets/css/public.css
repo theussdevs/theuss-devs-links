@@ -1,0 +1,215 @@
+/* ============================================================
+   public.css — Página pública · theuss.devs
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #080b0f;
+  --surface:  #0d1117;
+  --border:   rgba(255, 255, 255, 0.06);
+  --neon:     #00f5c4;
+  --neon2:    #7b5cff;
+  --neon-glow:rgba(0, 245, 196, 0.2);
+  --text:     #e8edf2;
+  --muted:    #4a5568;
+}
+
+/* ── Cursor personalizado ── */
+* { cursor: none !important; }
+
+#cursor {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--neon); mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width .2s, height .2s, opacity .2s;
+  will-change: transform;
+}
+#cursor-ring {
+  position: fixed; z-index: 9998; pointer-events: none;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid rgba(0,245,196,.5);
+  transform: translate(-50%, -50%);
+  transition: width .25s, height .25s, opacity .2s, border-color .2s;
+  will-change: transform;
+}
+#cursor.hover      { width: 16px; height: 16px; }
+#cursor-ring.hover { width: 50px; height: 50px; border-color: rgba(0,245,196,.8); }
+
+/* ── Base ── */
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* ── Canvas partículas ── */
+#particle-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: .55;
+}
+
+/* ── Grain ── */
+.grain {
+  position: fixed; inset: 0; z-index: 1;
+  pointer-events: none; opacity: .35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ── Blobs de fundo ── */
+.blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+.blob-1 { width:420px; height:420px; background:rgba(0,245,196,.055);  top:-120px;  left:-100px; animation: drift1 14s ease-in-out infinite alternate; }
+.blob-2 { width:300px; height:300px; background:rgba(123,92,255,.07);  bottom:-80px;right:-80px; animation: drift2 18s ease-in-out infinite alternate; }
+.blob-3 { width:200px; height:200px; background:rgba(0,245,196,.03);   top:50%;     left:50%;    transform:translate(-50%,-50%); animation: drift3 10s ease-in-out infinite alternate; }
+
+@keyframes drift1 { to { transform: translate(40px, 30px) scale(1.1); } }
+@keyframes drift2 { to { transform: translate(-30px, -20px) scale(1.08); } }
+@keyframes drift3 { to { transform: translate(-50%, -60%) scale(1.2); } }
+
+/* ── Layout central ── */
+.scene {
+  position: relative; z-index: 2;
+  max-width: 460px; margin: 0 auto;
+  padding: 72px 24px 60px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* ── Avatar ── */
+.avatar-wrap {
+  position: relative; margin-bottom: 32px;
+  opacity: 0; animation: revealUp .7s .1s ease forwards;
+}
+.avatar {
+  width: 92px; height: 92px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--neon2), var(--neon));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 2.1rem; font-weight: 800;
+  color: var(--bg); position: relative; z-index: 1;
+  transition: transform .4s ease;
+}
+.avatar:hover { transform: scale(1.06); }
+.avatar-glow {
+  position: absolute; inset: -8px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--neon) 0%, var(--neon2) 50%, var(--neon) 100%);
+  animation: spin 4s linear infinite; z-index: 0;
+}
+.avatar-glow::after {
+  content: ''; position: absolute; inset: 5px;
+  border-radius: 50%; background: var(--bg);
+}
+.avatar-ping {
+  position: absolute; inset: -14px; border-radius: 50%;
+  border: 1px solid rgba(0,245,196,.25);
+  animation: ping 2.5s ease-out infinite;
+}
+.avatar-ping:nth-child(2) { inset: -22px; border-color: rgba(0,245,196,.12); animation-delay: .8s; }
+
+@keyframes ping { 0%   { opacity:1; transform: scale(1);   }
+                  100% { opacity:0; transform: scale(1.3); } }
+@keyframes spin { to   { transform: rotate(360deg); } }
+
+/* ── Perfil ── */
+.profile {
+  text-align: center; margin-bottom: 10px;
+  opacity: 0; animation: revealUp .7s .2s ease forwards;
+}
+.profile-name {
+  font-family: 'Syne', sans-serif; font-size: 1.7rem;
+  font-weight: 800; letter-spacing: -.5px; line-height: 1.1; margin-bottom: 8px;
+}
+.profile-name .accent { color: var(--neon); text-shadow: 0 0 30px rgba(0,245,196,.35); }
+.profile-handle { font-size: .68rem; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; }
+.profile-bio    { font-size: .75rem; color: var(--muted); margin-top: 10px; letter-spacing: .02em; }
+
+/* ── Separador ── */
+.sep {
+  width: 1px; height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--neon), transparent);
+  margin: 24px 0; opacity: 0; animation: revealUp .6s .3s ease forwards;
+}
+
+/* ── Lista de links ── */
+.links { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+.link-card {
+  position: relative; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  text-decoration: none; color: var(--text);
+  display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+  transform-style: preserve-3d;
+  transition: border-color .3s, box-shadow .3s;
+  will-change: transform; opacity: 0;
+}
+.link-card.reveal { animation: revealUp .5s ease forwards; }
+
+.link-card::before {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+  transform: skewX(-20deg); transition: left .5s ease; pointer-events: none;
+}
+.link-card:hover::before { left: 150%; }
+
+.link-card::after {
+  content: ''; position: absolute; left: 0; top: 12%; bottom: 12%;
+  width: 2.5px; border-radius: 0 2px 2px 0;
+  background: linear-gradient(to bottom, var(--neon2), var(--neon));
+  transform: scaleY(0); transform-origin: bottom; transition: transform .25s ease;
+}
+.link-card:hover::after  { transform: scaleY(1); }
+.link-card:hover {
+  border-color: rgba(0,245,196,.22);
+  box-shadow: 0 4px 32px rgba(0,245,196,.06), 0 0 0 1px rgba(0,245,196,.04);
+}
+
+.link-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 1rem; transition: background .25s;
+}
+.link-card:hover .link-icon { background: rgba(0,245,196,.08); }
+
+.link-info { flex: 1; min-width: 0; }
+.link-name { font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 700; line-height: 1.2; }
+.link-url  { font-size: .62rem; color: var(--muted); margin-top: 2px; letter-spacing: .02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.link-arrow { font-size: .8rem; color: var(--muted); transition: color .2s, transform .25s; flex-shrink: 0; }
+.link-card:hover .link-arrow { color: var(--neon); transform: translateX(4px) rotate(-45deg); }
+
+/* ── Rodapé ── */
+.footer {
+  margin-top: 52px; text-align: center;
+  opacity: 0; animation: revealUp .6s 1.2s ease forwards;
+}
+.footer p   { font-size: .63rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.footer span { color: var(--neon); }
+
+/* ── Estado vazio ── */
+.empty {
+  text-align: center; padding: 40px 20px;
+  font-size: .75rem; color: var(--muted);
+  opacity: 0; animation: revealUp .5s .4s ease forwards;
+}
+.empty strong { display: block; margin-bottom: 6px; font-family: 'Syne', sans-serif; }
+
+/* ── Scroll hint ── */
+.scroll-hint {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  font-size: .58rem; color: var(--muted); letter-spacing: .12em;
+  text-transform: uppercase; pointer-events: none; z-index: 3;
+  animation: fadeScroll 3s 2s ease forwards;
+}
+@keyframes fadeScroll { 0%{opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
+@keyframes revealUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Responsivo ── */
+@media (max-width: 520px) {
+  .scene        { padding: 56px 16px 48px; }
+  .profile-name { font-size: 1.4rem; }
+  #cursor, #cursor-ring { display: none; }
+  * { cursor: auto !important; }
+}
