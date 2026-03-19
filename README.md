@@ -25,6 +25,7 @@ Funciona como uma alternativa leve a ferramentas como Linktree, priorizando **in
 - CSS e JS totalmente separados do HTML — estrutura profissional
 - Persistência local via navegador com fallback para `data/links.json`
 - Links visíveis em qualquer dispositivo mesmo sem acesso ao painel admin
+- **Sincronização automática com GitHub** — salvar no admin publica o site
 - Interface interativa com efeitos visuais modernos
 - Painel administrativo com autenticação básica
 
@@ -36,6 +37,7 @@ Funciona como uma alternativa leve a ferramentas como Linktree, priorizando **in
 theuss-devs-links/
 ├── index.html              # Página pública
 ├── admin.html              # Painel administrativo
+├── vercel.json             # Configuração de deploy estático
 ├── data/
 │   └── links.json          # Configuração padrão dos links (fallback)
 ├── assets/
@@ -56,11 +58,8 @@ theuss-devs-links/
 
 O sistema é dividido em duas interfaces independentes:
 
-- **Página Pública (`index.html`)**
-  Exibe os links ativos com animações e efeitos visuais.
-
-- **Painel Administrativo (`admin.html`)**
-  Interface protegida para gerenciamento dos links.
+- **Página Pública (`index.html`)** — Exibe os links ativos com animações e efeitos visuais.
+- **Painel Administrativo (`admin.html`)** — Interface protegida para gerenciamento dos links.
 
 ---
 
@@ -69,10 +68,7 @@ O sistema é dividido em duas interfaces independentes:
 ### Interface Pública
 
 - Renderização apenas de links ativos
-- Efeitos visuais:
-  - Tilt 3D baseado no cursor
-  - Parallax de elementos
-  - Partículas animadas em canvas
+- Efeitos visuais: Tilt 3D, Parallax, Partículas animadas em canvas
 - Avatar animado com anel de gradiente
 - Layout responsivo
 
@@ -85,6 +81,29 @@ O sistema é dividido em duas interfaces independentes:
 - Validação e sanitização de URLs
 - Importação e exportação de configuração (JSON)
 - Log de segurança por sessão
+- **Sincronização automática com GitHub** ao salvar
+
+---
+
+## ✦ IDs de links disponíveis
+
+```
+instagram · tiktok · youtube · github · linkedin
+behance · discord · whatsapp · portfolio · github_repo
+```
+
+| ID            | Label        | Ícone            | Descrição                          |
+|---------------|--------------|------------------|------------------------------------|
+| `instagram`   | Instagram    | Instagram        | Perfil do Instagram                |
+| `tiktok`      | TikTok       | TikTok           | Perfil do TikTok                   |
+| `youtube`     | YouTube      | YouTube          | Canal do YouTube                   |
+| `github`      | GitHub       | GitHub (octocat) | Perfil do GitHub                   |
+| `linkedin`    | LinkedIn     | LinkedIn         | Perfil do LinkedIn                 |
+| `behance`     | Behance      | Behance          | Perfil do Behance                  |
+| `discord`     | Discord      | Discord          | Servidor ou perfil do Discord      |
+| `whatsapp`    | WhatsApp     | WhatsApp         | Link direto do WhatsApp            |
+| `portfolio`   | Portfólio    | Globo            | Site de portfólio                  |
+| `github_repo` | Repositório  | Pasta/branch     | Link direto para repositório GitHub|
 
 ---
 
@@ -109,35 +128,32 @@ O sistema é dividido em duas interfaces independentes:
 }
 ```
 
-### IDs disponíveis
-
-```
-instagram · tiktok · youtube · github · linkedin
-behance · discord · whatsapp · portfolio
-```
-
 ---
 
-## ✦ Persistência de Dados
+## ✦ Persistência e Sincronização
 
-O carregamento dos links segue uma **hierarquia de fallback**, garantindo que qualquer dispositivo veja os links:
+O carregamento dos links segue uma **hierarquia de fallback**:
 
-| Prioridade | Fonte                 | Armazenamento   | Escopo                        |
-|------------|-----------------------|-----------------|-------------------------------|
-| 1ª         | Admin (painel)        | localStorage    | Dispositivo atual             |
-| 2ª         | `data/links.json`     | Arquivo estático| Qualquer dispositivo          |
-| 3ª         | DEFAULT_DATA          | Embutido no JS  | Fallback absoluto             |
+| Prioridade | Fonte             | Armazenamento   | Escopo                   |
+|------------|-------------------|-----------------|--------------------------|
+| 1ª         | Admin (painel)    | localStorage    | Dispositivo atual        |
+| 2ª         | `data/links.json` | Arquivo estático| Qualquer dispositivo     |
+| 3ª         | DEFAULT_DATA      | Embutido no JS  | Fallback absoluto        |
 
-> **Como funciona em outros dispositivos:** Quando um visitante acessa a página em um celular que nunca abriu o painel admin, o JavaScript tenta buscar `data/links.json` do servidor. Por isso é importante manter esse arquivo atualizado via exportação no painel.
+### Sync automático GitHub → Vercel
 
-- Sessão do admin: `sessionStorage` (expira ao fechar o navegador)
-- Log de segurança: `sessionStorage`
+Ao clicar em **Salvar alterações** no painel admin (com token configurado):
+
+1. Os dados são salvos no `localStorage` do navegador
+2. Um commit é feito direto no `data/links.json` do repositório GitHub
+3. O Vercel detecta o push e publica um novo deploy em ~30 segundos
+4. O site atualiza para todos os dispositivos automaticamente
 
 ---
 
 ## ✦ Configuração
 
-### Credenciais
+### Credenciais do painel
 
 As credenciais padrão estão em `assets/js/admin.js`:
 
@@ -145,21 +161,21 @@ As credenciais padrão estão em `assets/js/admin.js`:
 const SETUP = { user: 'Theuss', pass: 'dev' };
 ```
 
-Para trocar sem editar o código-fonte, abra o console do navegador na página `admin.html` e rode:
+Para trocar sem editar o código, abra o console em `admin.html` e rode:
 
 ```js
 hashCredentials('novoUsuario', 'novaSenha').then(h => console.log(h))
 ```
 
-Substitua o valor de `SETUP` pelo novo par de credenciais, ou armazene o hash resultante diretamente.
+### GitHub Token (sync automático)
 
-### Atualizar links.json para outros dispositivos
+No painel admin, seção **"Publicação automática — GitHub"**:
 
-Após configurar os links no painel admin:
+- **Token:** Personal Access Token com escopo `repo`
+  - Gerar em: `github.com/settings/tokens`
+- **Repositório:** `theussdevs/theuss-devs-links`
 
-1. Clique em **Exportar links.json**
-2. Substitua o arquivo `data/links.json` no servidor pelo exportado
-3. Faça deploy novamente
+O token é salvo apenas no `localStorage` do seu navegador — nunca sai do dispositivo.
 
 ---
 
@@ -169,99 +185,69 @@ Após configurar os links no painel admin:
 
 - Hash de senha com SHA-256 (Web Crypto API)
 - Rate limiting de login (3 tentativas → bloqueio de 30s)
-- Token de sessão com expiração automática (30 min)
+- Sessão com expiração automática (30 min)
 - Sanitização de inputs (proteção contra XSS)
 - Validação de URLs (`http` e `https` apenas)
 - Content Security Policy (CSP) sem `unsafe-inline`
+- `connect-src 'self' https://api.github.com` — apenas conexões necessárias
 - Validação de JSON importado
 - `X-Frame-Options: DENY` no painel admin
 - `Referrer-Policy: no-referrer`
 
-### Limitações (inerentes ao modelo client-side)
+### Limitações
 
 - O código-fonte é acessível ao usuário no navegador
 - Autenticação pode ser contornada localmente via DevTools
-- Não há sincronização automática entre dispositivos
-
-> Este projeto não foi projetado para ambientes sensíveis ou multiusuário.
-
----
-
-## ✦ Customização
-
-### Tema (CSS)
-
-Edite as variáveis em `assets/css/public.css`:
-
-```css
-:root {
-  --neon:    #00f5c4;
-  --neon2:   #7b5cff;
-  --bg:      #080b0f;
-  --surface: #0d1117;
-}
-```
-
-### Conteúdo (HTML)
-
-- Nome, bio e handle: editáveis pelo painel ou diretamente no `data/links.json`
-- Estrutura visual: `index.html`
-
-### Links
-
-Gerenciados via painel (`admin.html`) ou editando `data/links.json` diretamente.
+- Não há sincronização automática entre dispositivos (sem o token GitHub configurado)
 
 ---
 
 ## ✦ Deploy
 
-Compatível com qualquer hospedagem estática:
+Compatível com GitHub Pages, Vercel e Netlify.
 
-- **GitHub Pages**
-- **Vercel**
-- **Netlify**
-
-Requisito: servir arquivos HTML/CSS/JS estáticos com suporte a fetch do mesmo domínio.
-
-> **Atenção:** Para que `data/links.json` seja acessível via `fetch()`, o servidor precisa servir arquivos estáticos normalmente. GitHub Pages, Vercel e Netlify fazem isso automaticamente.
+O `vercel.json` incluído configura o deploy como site estático sem build.
 
 ---
 
-## ✦ Correções Aplicadas (v1.1)
+## ✦ Histórico de Alterações
 
-As seguintes correções foram aplicadas em relação à versão inicial:
+### v1.2 — Repositório GitHub como link + Sync automático
 
-| # | Problema | Impacto | Correção |
-|---|----------|---------|----------|
-| 1 | Chave de `localStorage` diferente entre `index.html` (`tdevs_links_v1`) e `admin.html` (`__tdevs_links`) | Links salvos pelo admin nunca apareciam | Unificado para `__tdevs_links` |
-| 2 | `index.html` filtrava por `l.enabled`, mas admin salva `l.active` | Nenhum link passava no filtro | Corrigido para `l.active` |
-| 3 | Sem fallback para outros dispositivos | Links não apareciam em celulares sem acesso ao admin | Adicionado fetch de `data/links.json` como segunda fonte |
-| 4 | CSP com `connect-src 'none'` bloqueava `fetch()` | Fallback via `links.json` impossível | Alterado para `connect-src 'self'` |
-| 5 | Ícone do Portfólio com chave `'globe'` no admin | Ícone do portfólio ficava em branco | Corrigido para `'portfolio'` |
-| 6 | CSS e JS embutidos no HTML | Difícil manutenção | Separados em `assets/css/` e `assets/js/` |
-| 7 | `unsafe-inline` no CSP de script e style | Segurança reduzida | Removido — JS e CSS agora externos |
+**Arquivos alterados:**
 
----
+| Arquivo                  | Alteração                                                                 |
+|--------------------------|---------------------------------------------------------------------------|
+| `assets/js/icons.js`     | Adicionado ícone `github_repo` (pasta com seta de download)               |
+| `assets/js/public.js`    | Adicionado `github_repo` no `DEFAULT_DATA`                                |
+| `assets/js/admin.js`     | Adicionado `github_repo` no `DEFAULT_LINKS` + função `syncToGitHub()`     |
+| `data/links.json`        | Adicionado entry `github_repo` com URL do repositório                     |
+| `admin.html`             | Adicionada seção "Publicação automática — GitHub" + CSP corrigida         |
+| `README.md`              | Documentação atualizada com todas as mudanças                             |
 
-## ✦ Status do Projeto
+**Detalhes das mudanças:**
 
-> Projeto pessoal ativo, estável para uso próprio.
+- `github_repo` é um ID distinto de `github` — o primeiro aponta para um repositório específico, o segundo para um perfil de usuário
+- O ícone `github_repo` usa pasta + seta (diferente do octocat do `github`)
+- A CSP do `admin.html` foi corrigida de `connect-src 'none'` para `connect-src 'self' https://api.github.com`, permitindo o sync
+- A função `syncToGitHub()` em `admin.js` faz um PUT direto na GitHub Contents API, atualizando `data/links.json` com commit automático
+
+### v1.1 — Correções críticas de bugs
+
+| # | Problema | Correção |
+|---|----------|----------|
+| 1 | Chave de `localStorage` diferente entre os arquivos | Unificado para `__tdevs_links` |
+| 2 | Filtro por `l.enabled` em vez de `l.active` | Corrigido para `l.active` |
+| 3 | Sem fallback para outros dispositivos | Adicionado fetch de `data/links.json` |
+| 4 | CSP com `connect-src 'none'` bloqueava fetch | Alterado para `connect-src 'self'` |
+| 5 | Ícone do Portfólio com chave `'globe'` | Corrigido para `'portfolio'` |
+| 6 | CSS e JS embutidos no HTML | Separados em `assets/css/` e `assets/js/` |
+| 7 | `unsafe-inline` no CSP | Removido — JS e CSS agora externos |
 
 ---
 
 ## ✦ Licença
 
-© 2025 **@theuss.devs**
+© 2025 **@theuss.devs** — Todos os direitos reservados.
 
-Todos os direitos reservados.
-
-Este projeto é de uso estritamente pessoal e não é software de código aberto.
-
-É proibido, sem autorização prévia e por escrito do autor:
-
-- Copiar ou redistribuir este código, integral ou parcialmente
-- Modificar e publicar versões derivadas
-- Utilizar este projeto para fins comerciais
-- Reutilizar partes do código em outros projetos públicos ou privados
-
-O uso para fins de estudo pessoal é permitido, desde que não haja redistribuição.
+Uso estritamente pessoal. Proibido copiar, redistribuir ou usar comercialmente sem autorização.
