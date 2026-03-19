@@ -40,7 +40,8 @@
     { id: 'behance',   label: 'Behance',   url: '', icon: 'behance',   active: false },
     { id: 'discord',   label: 'Discord',   url: '', icon: 'discord',   active: false },
     { id: 'whatsapp',  label: 'WhatsApp',  url: '', icon: 'whatsapp',  active: false },
-    { id: 'portfolio', label: 'Portfólio', url: '', icon: 'portfolio', active: false },
+    { id: 'portfolio',   label: 'Portfólio',   url: '', icon: 'portfolio',   active: false },
+    { id: 'github_repo', label: 'Repositório',  url: '', icon: 'github_repo', active: false },
   ];
 
   /* ── Segurança ── */
