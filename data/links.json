@@ -8,7 +8,7 @@
     {
       "id": "instagram",
       "label": "Instagram",
-      "url": "https://www.instagram.com/theuss.dev?igsh=aHpqdGszazYxdWk5",
+      "url": "https://www.instagram.com/reel/DSxMVOBgJix/?igsh=MWRkaDBwdWJydGNjYg==",
       "icon": "instagram",
       "active": true
     },
@@ -57,9 +57,9 @@
     {
       "id": "whatsapp",
       "label": "WhatsApp",
-      "url": "https://wa.me/qr/QJPZ4CZEPJB4E1",
+      "url": "",
       "icon": "whatsapp",
-      "active": true
+      "active": false
     },
     {
       "id": "portfolio",
