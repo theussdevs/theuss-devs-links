@@ -33,7 +33,8 @@
       { id: 'behance',   label: 'Behance',   url: '',                                                             icon: 'behance',   active: false },
       { id: 'discord',   label: 'Discord',   url: '',                                                             icon: 'discord',   active: false },
       { id: 'whatsapp',  label: 'WhatsApp',  url: 'https://wa.me/qr/QJPZ4CZEPJB4E1',                            icon: 'whatsapp',  active: true  },
-      { id: 'portfolio', label: 'Portfólio', url: '',                                                             icon: 'portfolio', active: false },
+      { id: 'portfolio',   label: 'Portfólio',    url: '',                                                             icon: 'portfolio',   active: false },
+      { id: 'github_repo', label: 'Repositório',  url: 'https://github.com/theussdevs/theuss-devs-links',              icon: 'github_repo', active: false },
     ],
   };
 
